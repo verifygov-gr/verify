@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<title>Επαλήθευση Εγγράφου</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body { font-family: Arial; background:#f2f4f7; }
+.card {
+  max-width: 600px;
+  margin: 60px auto;
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+}
+.valid { color: green; font-weight: bold; }
+.invalid { color: red; }
+</style>
+</head>
+<body>
+
+<div class="card" id="app">Έλεγχος κωδικού...</div>
+
+<script>
+const code = location.pathname.split("/").pop();
+
+fetch("data.json")
+.then(r => r.json())
+.then(data => {
+  const doc = data[code];
+  if (!doc) {
+    document.getElementById("app").innerHTML =
+      "<p class='invalid'>❌ Μη έγκυρος κωδικός επαλήθευσης</p>";
+    return;
+  }
+
+  document.getElementById("app").innerHTML = `
+    <h2 class="valid">✅ Έγκυρο Έγγραφο</h2>
+    <p><b>Τίτλος:</b> ${doc.title}</p>
+    <p><b>Ημερομηνία:</b> ${doc.date}</p>
+    <p><b>Κωδικός:</b> ${code}</p>
+    <p><a href="${doc.pdf}" target="_blank">📄 Λήψη PDF</a></p>
+    <hr>
+    <small>Ιδιωτική ψηφιακή επαλήθευση εγγράφου</small>
+  `;
+});
+</script>
+
+</body>
+</html>
